@@ -1,0 +1,19 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: kavita
+  labels:
+    name: kavita
+spec:
+  rules:
+    - host: <set this in overlay>
+      http:
+        paths:
+          - path: /
+            backend:
+              service:
+                name: kavita
+                port:
+                  name: http
+            pathType: Prefix
+

@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: kavita
+  labels:
+    app: kavita
+data:
+  appsettings.json: |
+    {
+    }
+

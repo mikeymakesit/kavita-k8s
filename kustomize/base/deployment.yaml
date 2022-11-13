@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kavita
+  labels:
+    app: kavita
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kavita
+  template:
+    metadata:
+      labels:
+        app: kavita
+    spec:
+      serviceAccountName: kavita
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+      containers:
+        - name: kavita
+          image: docker.io/kizaing/kavita:latest
+          imagePullPolicy: Always
+          ports:
+            - name: http
+              protocol: TCP
+              containerPort: 5000
+          livenessProbe:
+            httpGet:
+              path: /api/health
+              port: http
+            failureThreshold: 5
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /api/health
+              port: http
+            failureThreshold: 5
+            periodSeconds: 10
+          volumeMounts:
+            - mountPath: /kavita/config
+              name: config
+            #- mountPath: /kavita/config/appsettings.json
+            #  name: appsettings
+            #  subPath: appsettings.json
+            - mountPath: /kavita/library
+              name: library
+      volumes:
+        - name: config
+          persistentVolumeClaim:
+            claimName: kavita
+        - name: appsettings
+          configMap:
+            name: kavita
+
