@@ -1,6 +1,6 @@
 # Kavita Comic Server on Kubernetes
 
-Deploy Kavita to Kubernetes using a Kustomize overlay.
+Deploy [Kavita](https://github.com/Kareadita/Kavita) to Kubernetes using a Kustomize overlay.
 
 You will need to edit `kustomize/overlays/local/kustomization.yaml` to
 specify the following for your environment:
@@ -12,7 +12,7 @@ specify the following for your environment:
 ## K8s or K3s
 
 ```bash
-kubectl apply kustomize/overlays/local
+kubectl apply -k kustomize/overlays/local
 ```
 
 ## App config
@@ -20,6 +20,9 @@ kubectl apply kustomize/overlays/local
 The Kavita config and all the covers are stored in the PersistentVolumeClaim.
 If you delete that or your entire namespace, you'll lose that and have to 
 recreate it.
+
+I stubbed out a ConfigMap where you could store your appconfig, but you'll want to
+be careful of any secrets in the config.
 
 ## Test in Podman
 
