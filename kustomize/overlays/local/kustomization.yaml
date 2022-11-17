@@ -14,6 +14,19 @@ patchesJson6902:
       - op: replace
         path: /spec/rules/0/host
         value: kavita.local
+      - op: add
+        path: /spec/rules/-
+        value:
+          host: kavita.qed.fyi
+          http:
+            paths:
+              - path: /
+                backend:
+                  service:
+                    name: kavita
+                    port:
+                      name: http
+                pathType: Prefix
 
   # Set the amount of storage to use for Kavita in its PVC
   - target:
