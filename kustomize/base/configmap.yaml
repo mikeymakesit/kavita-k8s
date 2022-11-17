@@ -9,3 +9,14 @@ data:
     {
     }
 
+---
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: kavita-email
+  labels:
+    app: kavita-email
+data:
+  # populate in overlay
+

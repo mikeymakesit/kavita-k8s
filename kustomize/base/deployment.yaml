@@ -47,6 +47,32 @@ spec:
             #  subPath: appsettings.json
             - mountPath: /kavita/library
               name: library
+        - name: kavita-email
+          image: kizaing/kavitaemail:latest
+          imagePullPolicy: Always
+          ports:
+            - name: httpemail
+              protocol: TCP
+              containerPort: 5003
+          envFrom:
+            - configMapRef:
+                name: kavita-email
+          securityContext:
+            runAsNonRoot: false
+            runAsUser: 0
+            runAsGroup: 0
+     #     livenessProbe:
+     #       httpGet:
+     #         path: /api/health
+     #         port: httpemail
+     #       failureThreshold: 5
+     #       periodSeconds: 10
+     #     readinessProbe:
+     #       httpGet:
+     #         path: /api/health
+     #         port: httpemail
+     #       failureThreshold: 5
+     #       periodSeconds: 10
       volumes:
         - name: config
           persistentVolumeClaim:

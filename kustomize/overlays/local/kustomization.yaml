@@ -53,3 +53,18 @@ patchesJson6902:
             path: /Library
             readOnly: true
 
+  # Configure the SMTP properties for KavitaEmail
+  - target:
+      version: v1
+      kind: ConfigMap
+      name: kavita-email
+    patch: |-
+      - op: replace
+        path: /data
+        value:
+          SMTP_HOST: passw0rd.org
+          SMTP_PORT: "25"
+          SEND_ADDR: kavita@passw0rd.org
+          DISP_NAME: Kavita Admin
+          ALLOW_SENDTO: "true"
+
