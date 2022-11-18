@@ -36,7 +36,7 @@ patchesJson6902:
     patch: |-
       - op: replace
         path: /spec/resources/requests/storage
-        value: 2Gi
+        value: 5Gi
 
   # Set the location of the library's volume in the Deployment
   - target:

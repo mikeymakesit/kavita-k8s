@@ -13,18 +13,3 @@ spec:
   selector:
     app: kavita
 
----
-
-apiVersion: v1
-kind: Service
-metadata:
-  name: kavita-email
-  labels:
-    name: kavita-email
-spec:
-  ports:
-    - port: 5003
-      protocol: TCP
-  selector:
-    app: kavita
-

@@ -51,7 +51,7 @@ spec:
           image: kizaing/kavitaemail:latest
           imagePullPolicy: Always
           ports:
-            - name: httpemail
+            - name: http
               protocol: TCP
               containerPort: 5003
           envFrom:
@@ -61,18 +61,19 @@ spec:
             runAsNonRoot: false
             runAsUser: 0
             runAsGroup: 0
-     #     livenessProbe:
-     #       httpGet:
-     #         path: /api/health
-     #         port: httpemail
-     #       failureThreshold: 5
-     #       periodSeconds: 10
-     #     readinessProbe:
-     #       httpGet:
-     #         path: /api/health
-     #         port: httpemail
-     #       failureThreshold: 5
-     #       periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /api/test
+              port: http
+            failureThreshold: 3
+            periodSeconds: 60
+          readinessProbe:
+            httpGet:
+              path: /api/test
+              port: http
+            initialDelaySeconds: 30
+            failureThreshold: 5
+            periodSeconds: 5
       volumes:
         - name: config
           persistentVolumeClaim:
