@@ -4,7 +4,7 @@ kind: Kustomization
 resources:
   - ../../base
 
-patchesJson6902:
+patches:
   # Set the hostname for the Kavita ingress
   - target:
       version: v1
@@ -49,7 +49,7 @@ patchesJson6902:
         value: 
           name: library
           nfs:
-            server: 192.168.1.3
+            server: 192.168.1.5
             path: /Library
             readOnly: true
 
@@ -62,9 +62,45 @@ patchesJson6902:
       - op: replace
         path: /data
         value:
-          SMTP_HOST: passw0rd.org
-          SMTP_PORT: "25"
-          SEND_ADDR: kavita@passw0rd.org
-          DISP_NAME: Kavita Admin
-          ALLOW_SENDTO: "true"
+          appsettings.json: |
+            {
+                "TokenKey": "super ssdfasdfecret unguessable key",
+                "Serilog": {
+                  "Using":  [ "Serilog.Sinks.Console", "Serilog.Sinks.File" ],
+                  "MinimumLevel": "Debug",
+                  "WriteTo": [
+                    {
+                      "Name": "Console",
+                      "Args": {
+                        "outputTemplate": "[KavitaEmail] [{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} {CorrelationId} {ThreadId}] [{Level}] {SourceContext} {Message:lj}{NewLine}{Exception}"
+                      }
+                    },
+                    { "Name": "File", "Args": {
+                        "path": "config/logs/kavitaemail.log",
+                        "outputTemplate": "[KavitaEmail] [{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} {CorrelationId} {ThreadId}] [{Level}] {SourceContext} {Message:lj}{NewLine}{Exception}"
+                      }
+                    },
+                    { "Name": "Seq", "Args": { "serverUrl": "http://localhost:5341", "apiKey": "" } }
+                  ],
+                  "Enrich": [ "FromLogContext", "WithMachineName", "WithThreadId" ],
+                  "Destructure": [
+                    { "Name": "ToMaximumDepth", "Args": { "maximumDestructuringDepth": 4 } },
+                    { "Name": "ToMaximumStringLength", "Args": { "maximumStringLength": 100 } },
+                    { "Name": "ToMaximumCollectionCount", "Args": { "maximumCollectionCount": 10 } }
+                  ],
+                  "Properties": {
+                    "Application": "KavitaEmail"
+                  }
+                },
+                "SMTP": {
+                  "Host": "passw0rd.org",
+                  "Port": 25,
+                  "UserName": "",
+                  "Password": "",
+                  "SenderAddress": "kavita@passw0rd.org",
+                  "SenderDisplayName": "Kavita Admin",
+                  "AllowSendTo": true,
+                  "SizeLimit": 26214400
+                }
+            }
 

@@ -12,4 +12,5 @@ spec:
       name: http
   selector:
     app: kavita
+  #publishNotReadyAddresses: true
 

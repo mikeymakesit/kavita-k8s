@@ -15,13 +15,13 @@ spec:
         app: kavita
     spec:
       serviceAccountName: kavita
-      securityContext:
-        runAsNonRoot: true
-        runAsUser: 1000
-        runAsGroup: 1000
+      #securityContext:
+      #  runAsNonRoot: true
+      #  runAsUser: 1000
+      #  runAsGroup: 1000
       containers:
         - name: kavita
-          image: docker.io/kizaing/kavita:latest
+          image: jvmilazz0/kavita:latest
           imagePullPolicy: Always
           ports:
             - name: http
@@ -42,13 +42,10 @@ spec:
           volumeMounts:
             - mountPath: /kavita/config
               name: config
-            #- mountPath: /kavita/config/appsettings.json
-            #  name: appsettings
-            #  subPath: appsettings.json
             - mountPath: /kavita/library
               name: library
         - name: kavita-email
-          image: kizaing/kavitaemail:latest
+          image: jvmilazz0/kavitaemail:latest
           imagePullPolicy: Always
           ports:
             - name: http
@@ -74,6 +71,10 @@ spec:
             initialDelaySeconds: 30
             failureThreshold: 5
             periodSeconds: 5
+          volumeMounts:
+            - mountPath: /app/config/appsettings.json
+              subPath: appsettings.json
+              name: config-email
       volumes:
         - name: config
           persistentVolumeClaim:
@@ -81,4 +82,7 @@ spec:
         - name: appsettings
           configMap:
             name: kavita
+        - name: config-email
+          configMap:
+            name: kavita-email
 
